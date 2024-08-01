@@ -1,0 +1,10 @@
+{
+  "title": "Default numbered traversal starts at one and fetches the sentinel",
+  "mode": "numbered",
+  "pages": [
+    {"token": 0, "items": ["before start"]},
+    {"token": 1, "items": ["ash", "elm"]},
+    {"token": 2, "items": []}
+  ],
+  "expected": {"fetches": [1, 2], "items": ["ash", "elm"]}
+}

@@ -116,3 +116,16 @@ python -m pytest
 ```
 
 CI checks the installed package on Python 3.11 and 3.14.
+
+### Offline regression vectors
+
+`tests/regression_vectors/` contains synthetic numbered and cursor responses
+with hand-written request traces and expected items. The cases cover uneven
+page sizes, empty responses, known ends and request budgets, cancellation,
+cursor cycles, and partial pulls without prefetch. `take` caps the number of
+item pulls; `cancel_at` and `cancel_after_items` make cancellation pending
+after a specified number of fetches or yields. Run the corpus with:
+
+```sh
+python -m pytest tests/test_regression_vectors.py
+```
