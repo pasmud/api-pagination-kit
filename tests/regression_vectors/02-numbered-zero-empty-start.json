@@ -1,0 +1,10 @@
+{
+  "title": "An empty page zero stops before the stocked page one",
+  "mode": "numbered",
+  "options": {"start_page": 0},
+  "pages": [
+    {"token": 0, "items": []},
+    {"token": 1, "items": ["unreached"]}
+  ],
+  "expected": {"fetches": [0], "items": []}
+}
