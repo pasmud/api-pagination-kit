@@ -1,0 +1,13 @@
+{
+  "title": "The first numbered gap hides later nonempty pages",
+  "mode": "numbered",
+  "options": {"start_page": 12},
+  "pages": [
+    {"token": 12, "items": ["left"]},
+    {"token": 13, "items": ["right", "edge"]},
+    {"token": 14, "items": []},
+    {"token": 15, "items": ["hidden", "suffix"]},
+    {"token": 16, "items": []}
+  ],
+  "expected": {"fetches": [12, 13, 14], "items": ["left", "right", "edge"]}
+}
