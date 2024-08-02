@@ -1,0 +1,11 @@
+{
+  "title": "A short numbered middle page does not end a growing response",
+  "mode": "numbered",
+  "pages": [
+    {"token": 1, "items": ["a", "b", "c"]},
+    {"token": 2, "items": ["d"]},
+    {"token": 3, "items": ["e", "f", "g", "h"]},
+    {"token": 4, "items": []}
+  ],
+  "expected": {"fetches": [1, 2, 3, 4], "items": ["a", "b", "c", "d", "e", "f", "g", "h"]}
+}
