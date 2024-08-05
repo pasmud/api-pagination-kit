@@ -1,0 +1,12 @@
+{
+  "title": "Null, false and blank singleton pages are not empty pages",
+  "mode": "numbered",
+  "options": {"start_page": 0},
+  "pages": [
+    {"token": 0, "items": [null]},
+    {"token": 1, "items": [false]},
+    {"token": 2, "items": [""]},
+    {"token": 3, "items": []}
+  ],
+  "expected": {"fetches": [0, 1, 2, 3], "items": [null, false, ""]}
+}
