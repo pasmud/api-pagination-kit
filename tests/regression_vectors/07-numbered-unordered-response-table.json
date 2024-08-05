@@ -1,0 +1,11 @@
+{
+  "title": "Numbered requests follow arithmetic rather than fixture row order",
+  "mode": "numbered",
+  "options": {"start_page": 8},
+  "pages": [
+    {"token": 10, "items": []},
+    {"token": 9, "items": ["nine"]},
+    {"token": 8, "items": ["eight", "second"]}
+  ],
+  "expected": {"fetches": [8, 9, 10], "items": ["eight", "second", "nine"]}
+}
