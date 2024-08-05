@@ -1,0 +1,10 @@
+{
+  "title": "Numbered pages preserve duplicates within and across a seam",
+  "mode": "numbered",
+  "pages": [
+    {"token": 1, "items": ["oak", "oak"]},
+    {"token": 2, "items": ["oak", "pine", "oak"]},
+    {"token": 3, "items": []}
+  ],
+  "expected": {"fetches": [1, 2, 3], "items": ["oak", "oak", "oak", "pine", "oak"]}
+}
