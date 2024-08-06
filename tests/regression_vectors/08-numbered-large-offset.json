@@ -1,0 +1,11 @@
+{
+  "title": "Adjacent page numbers stay distinct above exact float precision",
+  "mode": "numbered",
+  "options": {"start_page": 9007199254740992},
+  "pages": [
+    {"token": 9007199254740992, "items": ["base"]},
+    {"token": 9007199254740993, "items": ["successor"]},
+    {"token": 9007199254740994, "items": []}
+  ],
+  "expected": {"fetches": [9007199254740992, 9007199254740993, 9007199254740994], "items": ["base", "successor"]}
+}
