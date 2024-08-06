@@ -2,7 +2,7 @@
 
 Typed, synchronous pagination iterators for Python 3.11+ with no runtime
 dependencies. Your fetch function handles requests and response decoding;
-the kit decides which page to request next and yields the items in order.
+the kit decides which page to request next and yields items or whole pages in order.
 
 ## Install and try it locally
 
@@ -27,9 +27,10 @@ Requests after completion: [None, 'demo-gap', 'demo-last']
 
 ## API
 
-Both functions are imported from `api_pagination_kit` and return a single-use
-`Iterator[T]`. Results preserve the fetcher's item order, including duplicates.
-Pages may contain any iterable of `T`, including a generator.
+Import the iterators and page types from `api_pagination_kit`. The item
+iterators below return a single-use `Iterator[T]`. All iterators preserve the
+fetcher's item order, including duplicates. A fetcher may return any iterable
+of `T` for the page items, including a generator.
 
 | Function | Fetch callable | End condition |
 | --- | --- | --- |
@@ -44,12 +45,32 @@ Pages may contain any iterable of `T`, including a generator.
   Cursor strings are opaque, and `""` is a valid continuation. An empty page with
   a continuation advances, and an empty page with `None` ends normally.
 
+### Whole pages and checkpoints
+
+`iter_numbered_pages` takes the same arguments as `iter_page_numbers` and
+yields `NumberedPage[T]` objects with `number` and `items` attributes. It
+omits the empty response that signals the end. `iter_cursor_pages` takes the
+same arguments as `iter_cursors` and yields `CursorPage[T]` objects with
+`cursor`, `items`, and `next_cursor` attributes. It includes empty responses,
+even the terminal one, so callers can observe every cursor transition.
+
+Each page iterator consumes one response fully into a tuple before yielding
+its batch. Use the item iterators for streaming within a page. A failed item
+source does not yield a partial batch.
+
+After processing a cursor batch, you can save its `next_cursor` and pass it
+as `start_cursor` in a later run. Treat `None` as completion rather than
+restarting, and preserve `""` as a valid checkpoint. A new iterator starts
+with a fresh request budget and cycle history; a continuation is checked
+for cycles when the current iterator advances. The page representation omits
+both cursor fields.
+
 ### Pull-based execution and errors
 
 - Creating the iterator validates the options but performs no fetch or item
-  work. Fetches are synchronous, with no prefetch or buffering of items by the
-  kit. A page's iterable is consumed before the next fetch; stopping iteration
-  stops further requests. A single cursor pull may cross several empty pages.
+  work. Fetches are synchronous, with no prefetch. A page's iterable is
+  consumed before the next fetch; stopping iteration stops further requests.
+  A single pull from `iter_cursors` may cross several empty pages.
 - `max_pages` is a positive integer and counts requests, including empty pages.
   Normal termination exactly at the limit is allowed. If another fetch would
   exceed the limit, `PageLimitError` is raised after the items from the last
