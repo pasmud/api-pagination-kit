@@ -1,0 +1,11 @@
+{
+  "title": "Page numbers advance across the 99 to 100 boundary",
+  "mode": "numbered",
+  "options": {"start_page": 99, "max_pages": 4},
+  "pages": [
+    {"token": 99, "items": ["last double digit"]},
+    {"token": 100, "items": ["first triple digit", "extra"]},
+    {"token": 101, "items": []}
+  ],
+  "expected": {"fetches": [99, 100, 101], "items": ["last double digit", "first triple digit", "extra"]}
+}
