@@ -1,0 +1,10 @@
+{
+  "title": "Nested JSON values remain single numbered items",
+  "mode": "numbered",
+  "pages": [
+    {"token": 1, "items": [["left", "right"], {"label": "sample"}]},
+    {"token": 2, "items": [[], {}]},
+    {"token": 3, "items": []}
+  ],
+  "expected": {"fetches": [1, 2, 3], "items": [["left", "right"], {"label": "sample"}, [], {}]}
+}
