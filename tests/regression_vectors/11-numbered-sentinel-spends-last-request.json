@@ -1,0 +1,12 @@
+{
+  "title": "A numbered sentinel may spend the last available request",
+  "mode": "numbered",
+  "options": {"start_page": 4, "max_pages": 3},
+  "pages": [
+    {"token": 4, "items": ["wide", "page", "four"]},
+    {"token": 5, "items": ["short"]},
+    {"token": 6, "items": []},
+    {"token": 7, "items": ["unreached"]}
+  ],
+  "expected": {"fetches": [4, 5, 6], "items": ["wide", "page", "four", "short"]}
+}
