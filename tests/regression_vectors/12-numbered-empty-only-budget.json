@@ -1,0 +1,7 @@
+{
+  "title": "An empty opening response completes with a one-request budget",
+  "mode": "numbered",
+  "options": {"max_pages": 1},
+  "pages": [{"token": 1, "items": []}],
+  "expected": {"fetches": [1], "items": []}
+}
