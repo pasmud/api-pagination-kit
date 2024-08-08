@@ -1,0 +1,10 @@
+{
+  "title": "A known inclusive end of zero delivers all items at zero",
+  "mode": "numbered",
+  "options": {"start_page": 0, "end_page": 0},
+  "pages": [
+    {"token": 0, "items": ["first", "second", "third"]},
+    {"token": 1, "items": ["outside"]}
+  ],
+  "expected": {"fetches": [0], "items": ["first", "second", "third"]}
+}
