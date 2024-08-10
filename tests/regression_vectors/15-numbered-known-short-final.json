@@ -1,0 +1,11 @@
+{
+  "title": "A short known final page completes without an empty probe",
+  "mode": "numbered",
+  "options": {"end_page": 3, "max_pages": 5},
+  "pages": [
+    {"token": 1, "items": ["a", "b"]},
+    {"token": 2, "items": ["c", "d"]},
+    {"token": 3, "items": ["tail"]}
+  ],
+  "expected": {"fetches": [1, 2, 3], "items": ["a", "b", "c", "d", "tail"]}
+}
