@@ -1,0 +1,11 @@
+{
+  "title": "A resumed numbered range can begin and end on the same page",
+  "mode": "numbered",
+  "options": {"start_page": 18, "end_page": 18, "max_pages": 1},
+  "pages": [
+    {"token": 17, "items": ["before"]},
+    {"token": 18, "items": ["resumed"]},
+    {"token": 19, "items": ["after"]}
+  ],
+  "expected": {"fetches": [18], "items": ["resumed"]}
+}
