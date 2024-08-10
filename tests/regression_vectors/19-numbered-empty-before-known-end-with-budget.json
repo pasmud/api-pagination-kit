@@ -1,0 +1,10 @@
+{
+  "title": "A first empty page wins over a farther end and a spent budget",
+  "mode": "numbered",
+  "options": {"start_page": 2, "end_page": 6, "max_pages": 1},
+  "pages": [
+    {"token": 2, "items": []},
+    {"token": 3, "items": ["unreached"]}
+  ],
+  "expected": {"fetches": [2], "items": []}
+}
