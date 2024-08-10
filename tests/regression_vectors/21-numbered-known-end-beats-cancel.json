@@ -1,0 +1,12 @@
+{
+  "title": "Finishing a known end does not consult pending cancellation",
+  "mode": "numbered",
+  "options": {"end_page": 2, "max_pages": 4},
+  "cancel_at": 2,
+  "pages": [
+    {"token": 1, "items": ["first"]},
+    {"token": 2, "items": ["last", "last again"]},
+    {"token": 3, "items": ["outside"]}
+  ],
+  "expected": {"fetches": [1, 2], "items": ["first", "last", "last again"]}
+}
