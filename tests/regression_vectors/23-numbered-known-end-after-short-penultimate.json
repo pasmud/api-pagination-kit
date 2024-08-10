@@ -1,0 +1,12 @@
+{
+  "title": "A short penultimate page cannot move the known end earlier",
+  "mode": "numbered",
+  "options": {"start_page": 37, "end_page": 40},
+  "pages": [
+    {"token": 37, "items": ["a", "b", "c"]},
+    {"token": 38, "items": ["d", "e", "f"]},
+    {"token": 39, "items": ["g"]},
+    {"token": 40, "items": ["h", "i"]}
+  ],
+  "expected": {"fetches": [37, 38, 39, 40], "items": ["a", "b", "c", "d", "e", "f", "g", "h", "i"]}
+}
