@@ -1,0 +1,12 @@
+{
+  "title": "A known numbered end leaves budget unused and hides later data",
+  "mode": "numbered",
+  "options": {"start_page": 0, "end_page": 2, "max_pages": 5},
+  "pages": [
+    {"token": 0, "items": ["zero", "repeat"]},
+    {"token": 1, "items": ["repeat"]},
+    {"token": 2, "items": ["tail", "repeat"]},
+    {"token": 3, "items": ["outside"]}
+  ],
+  "expected": {"fetches": [0, 1, 2], "items": ["zero", "repeat", "repeat", "tail", "repeat"]}
+}
