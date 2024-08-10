@@ -1,0 +1,13 @@
+{
+  "title": "A numbered gap ends before the next cancellation check",
+  "mode": "numbered",
+  "options": {"end_page": 4},
+  "cancel_at": 2,
+  "pages": [
+    {"token": 1, "items": ["kept"]},
+    {"token": 2, "items": []},
+    {"token": 3, "items": ["hidden"]},
+    {"token": 4, "items": ["bound"]}
+  ],
+  "expected": {"fetches": [1, 2], "items": ["kept"]}
+}
