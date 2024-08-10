@@ -1,0 +1,11 @@
+{
+  "title": "A known final position cannot extend a smaller request budget",
+  "mode": "numbered",
+  "options": {"start_page": 6, "end_page": 8, "max_pages": 2},
+  "pages": [
+    {"token": 6, "items": ["one"]},
+    {"token": 7, "items": ["two", "three", "four"]},
+    {"token": 8, "items": ["unfetched final"]}
+  ],
+  "expected": {"fetches": [6, 7], "items": ["one", "two", "three", "four"], "error": "limit"}
+}
