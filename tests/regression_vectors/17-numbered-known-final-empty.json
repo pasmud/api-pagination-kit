@@ -1,0 +1,12 @@
+{
+  "title": "The empty known final page is still fetched",
+  "mode": "numbered",
+  "options": {"end_page": 3},
+  "pages": [
+    {"token": 1, "items": ["head", "more"]},
+    {"token": 2, "items": ["last item"]},
+    {"token": 3, "items": []},
+    {"token": 4, "items": ["outside"]}
+  ],
+  "expected": {"fetches": [1, 2, 3], "items": ["head", "more", "last item"]}
+}
