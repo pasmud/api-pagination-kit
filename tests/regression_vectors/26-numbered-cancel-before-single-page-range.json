@@ -1,0 +1,8 @@
+{
+  "title": "Pre-cancellation blocks even a single-page known range",
+  "mode": "numbered",
+  "options": {"start_page": 0, "end_page": 0, "max_pages": 1},
+  "cancel_at": 0,
+  "pages": [{"token": 0, "items": ["never fetched"]}],
+  "expected": {"fetches": [], "items": [], "error": "cancelled"}
+}
