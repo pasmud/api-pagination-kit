@@ -1,0 +1,10 @@
+{
+  "title": "Cancellation prevents fetching the numbered empty sentinel",
+  "mode": "numbered",
+  "cancel_at": 1,
+  "pages": [
+    {"token": 1, "items": ["left", "right"]},
+    {"token": 2, "items": []}
+  ],
+  "expected": {"fetches": [1], "items": ["left", "right"], "error": "cancelled"}
+}
