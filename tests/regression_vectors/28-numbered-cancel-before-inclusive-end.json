@@ -1,0 +1,12 @@
+{
+  "title": "Cancellation can prevent reaching the inclusive end page",
+  "mode": "numbered",
+  "options": {"start_page": 15, "end_page": 17, "max_pages": 3},
+  "cancel_at": 2,
+  "pages": [
+    {"token": 15, "items": ["head", "middle"]},
+    {"token": 16, "items": ["penultimate"]},
+    {"token": 17, "items": ["blocked final"]}
+  ],
+  "expected": {"fetches": [15, 16], "items": ["head", "middle", "penultimate"], "error": "cancelled"}
+}
