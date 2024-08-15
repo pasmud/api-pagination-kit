@@ -77,18 +77,29 @@ both cursor fields.
   allowed page have been yielded, before a further fetch can happen.
 - `CursorCycleError` is raised before a repeated cursor can be fetched, after
   the current page's items have been yielded. A repeated continuation at the
-  limit raises `CursorCycleError` rather than `PageLimitError`. Both are
-  subclasses of `PaginationError` (`RuntimeError`).
+  limit raises `CursorCycleError` rather than `PageLimitError`.
+- All four iterators accept an optional `should_cancel` callback (for example,
+  `stop_event.is_set`). It is called with no arguments just before each
+  otherwise permitted fetch, including the first. If it returns true,
+  `PaginationCancelledError` closes the iterator without making that fetch.
+  It does not interrupt an in-progress call or a page's item stream. Normal
+  completion, cycle detection, and the request limit take precedence.
+- These three errors subclass `PaginationError` (`RuntimeError`). When raised
+  by the kit, `pages_fetched` counts responses already fetched, including empty
+  pages. `PageLimitError.max_pages` gives the configured limit, and
+  `CursorCycleError.first_seen_on_page` gives the repeated cursor's original
+  request position (1-based). These diagnostics do not contain cursor values.
 - Invalid option types raise `TypeError` at construction; booleans are not
   accepted as integers. Out-of-range integer options raise `ValueError`.
   An invalid continuation type raises `TypeError` before any items from that
   response are yielded.
-- Fetch and item-source errors propagate on the pull that encounters them;
-  items already yielded stay yielded, and the iterator cannot resume after an
-  error. As with any Python generator, a `StopIteration` raised directly by the
-  fetch callable becomes `RuntimeError`, while exhaustion of a page's item
-  iterable is normal. Retries and timeouts belong in the injected callable;
-  the page budget is not a timeout or an item limit.
+- Fetch, cancellation callback, and item-source errors propagate on the pull
+  that encounters them; items already yielded stay yielded, and the iterator
+  cannot resume after an error. As with any Python generator, a `StopIteration`
+  raised directly by the fetch callable or cancellation callback becomes
+  `RuntimeError`, while exhaustion of a page's item iterable is normal. Retries
+  and timeouts belong in the injected callable; the page budget is not a timeout
+  or an item limit.
 
 ## Development
 

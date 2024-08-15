@@ -53,6 +53,8 @@ def test_cycle_back_to_start_raises_after_page_items_without_refetching() -> Non
     with pytest.raises(CursorCycleError) as error:
         next(items)
     assert isinstance(error.value, PaginationError)
+    assert error.value.pages_fetched == 2
+    assert error.value.first_seen_on_page == 1
     assert start not in str(error.value)
     assert calls == [start, "next"]
     assert list(items) == []
@@ -92,6 +94,7 @@ def test_unique_empty_pages_exhaust_budget_during_one_pull() -> None:
         calls.append(cursor)
         return [], f"synthetic-{len(calls)}"
 
-    with pytest.raises(PageLimitError):
+    with pytest.raises(PageLimitError) as error:
         next(iter_cursors(fetch, max_pages=2))
+    assert error.value.pages_fetched == error.value.max_pages == 2
     assert calls == [None, "synthetic-1"]

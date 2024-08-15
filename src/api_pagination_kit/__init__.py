@@ -9,6 +9,7 @@ __all__ = [
     "CursorPage",
     "NumberedPage",
     "PageLimitError",
+    "PaginationCancelledError",
     "PaginationError",
     "iter_cursor_pages",
     "iter_cursors",
@@ -40,20 +41,64 @@ class CursorPage(Generic[T]):
 class PaginationError(RuntimeError):
     """Base class for pagination guard failures."""
 
+    def __init__(self, *args: object, pages_fetched: int | None = None) -> None:
+        super().__init__(*args)
+        self.pages_fetched = pages_fetched
+
 
 class CursorCycleError(PaginationError):
     """A cursor would be fetched for a second time."""
+
+    def __init__(
+        self,
+        *args: object,
+        pages_fetched: int | None = None,
+        first_seen_on_page: int | None = None,
+    ) -> None:
+        super().__init__(*args, pages_fetched=pages_fetched)
+        self.first_seen_on_page = first_seen_on_page
 
 
 class PageLimitError(PaginationError):
     """A further fetch would exceed the caller's page limit."""
 
+    def __init__(
+        self,
+        *args: object,
+        pages_fetched: int | None = None,
+        max_pages: int | None = None,
+    ) -> None:
+        super().__init__(*args, pages_fetched=pages_fetched)
+        self.max_pages = max_pages
 
-def _validate_page_limit(max_pages: int) -> None:
+
+class PaginationCancelledError(PaginationError):
+    """The caller cancelled pagination before the next fetch."""
+
+
+def _validate_guards(max_pages: int, should_cancel: Callable[[], bool] | None) -> None:
     if isinstance(max_pages, bool) or not isinstance(max_pages, int):
         raise TypeError("max_pages must be an integer")
     if max_pages < 1:
         raise ValueError("max_pages must be positive")
+    if should_cancel is not None and not callable(should_cancel):
+        raise TypeError("should_cancel must be callable or None")
+
+
+def _check_cancel(should_cancel: Callable[[], bool] | None, pages_fetched: int) -> None:
+    if should_cancel is not None and should_cancel():
+        raise PaginationCancelledError(
+            "pagination cancelled before the next page fetch",
+            pages_fetched=pages_fetched,
+        )
+
+
+def _page_limit_error(max_pages: int) -> PageLimitError:
+    return PageLimitError(
+        f"pagination requires more than {max_pages} page fetches",
+        pages_fetched=max_pages,
+        max_pages=max_pages,
+    )
 
 
 def _numbered_responses(
@@ -61,17 +106,20 @@ def _numbered_responses(
     *,
     start_page: int,
     max_pages: int,
+    should_cancel: Callable[[], bool] | None,
 ) -> Iterator[tuple[int, Iterable[T]]]:
     if isinstance(start_page, bool) or not isinstance(start_page, int):
         raise TypeError("start_page must be an integer")
     if start_page < 0:
         raise ValueError("start_page must be nonnegative")
-    _validate_page_limit(max_pages)
+    _validate_guards(max_pages, should_cancel)
 
     def responses() -> Iterator[tuple[int, Iterable[T]]]:
-        for page_number in range(start_page, start_page + max_pages):
+        for pages_fetched in range(max_pages):
+            _check_cancel(should_cancel, pages_fetched)
+            page_number = start_page + pages_fetched
             yield page_number, fetch_page(page_number)
-        raise PageLimitError(f"pagination requires more than {max_pages} page fetches")
+        raise _page_limit_error(max_pages)
 
     return responses()
 
@@ -81,16 +129,21 @@ def iter_page_numbers(
     *,
     start_page: int = 1,
     max_pages: int = _DEFAULT_MAX_PAGES,
+    should_cancel: Callable[[], bool] | None = None,
 ) -> Iterator[T]:
     """Yield items in order until the first empty page.
 
     ``fetch_page`` receives consecutive page numbers starting at ``start_page``.
     Fetches are deferred until iteration. If all ``max_pages`` permitted
     fetches produce items, a further pull raises ``PageLimitError`` rather
-    than fetching again.
+    than fetching again. If ``should_cancel`` returns true before an allowed
+    fetch, ``PaginationCancelledError`` is raised instead of fetching.
     """
     responses = _numbered_responses(
-        fetch_page, start_page=start_page, max_pages=max_pages
+        fetch_page,
+        start_page=start_page,
+        max_pages=max_pages,
+        should_cancel=should_cancel,
     )
 
     def items() -> Iterator[T]:
@@ -110,10 +163,14 @@ def iter_numbered_pages(
     *,
     start_page: int = 1,
     max_pages: int = _DEFAULT_MAX_PAGES,
+    should_cancel: Callable[[], bool] | None = None,
 ) -> Iterator[NumberedPage[T]]:
     """Yield nonempty numbered batches, consuming one page per pull."""
     responses = _numbered_responses(
-        fetch_page, start_page=start_page, max_pages=max_pages
+        fetch_page,
+        start_page=start_page,
+        max_pages=max_pages,
+        should_cancel=should_cancel,
     )
 
     def pages() -> Iterator[NumberedPage[T]]:
@@ -131,16 +188,18 @@ def _cursor_responses(
     *,
     start_cursor: str | None,
     max_pages: int,
+    should_cancel: Callable[[], bool] | None,
 ) -> Iterator[tuple[str | None, Iterable[T], str | None]]:
     if start_cursor is not None and not isinstance(start_cursor, str):
         raise TypeError("start_cursor must be a string or None")
-    _validate_page_limit(max_pages)
+    _validate_guards(max_pages, should_cancel)
 
     def responses() -> Iterator[tuple[str | None, Iterable[T], str | None]]:
         cursor = start_cursor
-        seen: set[str | None] = set()
-        for _ in range(max_pages):
-            seen.add(cursor)
+        seen: dict[str | None, int] = {}
+        for pages_fetched in range(max_pages):
+            _check_cancel(should_cancel, pages_fetched)
+            seen[cursor] = pages_fetched + 1
             page_items, next_cursor = fetch_page(cursor)
             if next_cursor is not None and not isinstance(next_cursor, str):
                 raise TypeError("next_cursor must be a string or None")
@@ -148,9 +207,13 @@ def _cursor_responses(
             if next_cursor is None:
                 return
             if next_cursor in seen:
-                raise CursorCycleError("fetch returned a previously requested cursor")
+                raise CursorCycleError(
+                    "fetch returned a previously requested cursor",
+                    pages_fetched=pages_fetched + 1,
+                    first_seen_on_page=seen[next_cursor],
+                )
             cursor = next_cursor
-        raise PageLimitError(f"pagination requires more than {max_pages} page fetches")
+        raise _page_limit_error(max_pages)
 
     return responses()
 
@@ -160,6 +223,7 @@ def iter_cursors(
     *,
     start_cursor: str | None = None,
     max_pages: int = _DEFAULT_MAX_PAGES,
+    should_cancel: Callable[[], bool] | None = None,
 ) -> Iterator[T]:
     """Yield items from ``(items, next_cursor)`` responses in cursor order.
 
@@ -168,10 +232,15 @@ def iter_cursors(
     after an empty page. A repeated cursor raises ``CursorCycleError`` before
     it is fetched again, after the preceding page's items have been yielded.
     A further distinct cursor beyond ``max_pages`` fetches raises
-    ``PageLimitError``. Empty pages count toward this limit.
+    ``PageLimitError``. Empty pages count toward this limit. If ``should_cancel``
+    returns true before an allowed fetch, ``PaginationCancelledError`` is raised
+    instead of fetching.
     """
     responses = _cursor_responses(
-        fetch_page, start_cursor=start_cursor, max_pages=max_pages
+        fetch_page,
+        start_cursor=start_cursor,
+        max_pages=max_pages,
+        should_cancel=should_cancel,
     )
 
     def items() -> Iterator[T]:
@@ -187,10 +256,14 @@ def iter_cursor_pages(
     *,
     start_cursor: str | None = None,
     max_pages: int = _DEFAULT_MAX_PAGES,
+    should_cancel: Callable[[], bool] | None = None,
 ) -> Iterator[CursorPage[T]]:
     """Yield cursor batches, including empty pages and the terminal response."""
     responses = _cursor_responses(
-        fetch_page, start_cursor=start_cursor, max_pages=max_pages
+        fetch_page,
+        start_cursor=start_cursor,
+        max_pages=max_pages,
+        should_cancel=should_cancel,
     )
     return (
         CursorPage(cursor, tuple(page_items), next_cursor)

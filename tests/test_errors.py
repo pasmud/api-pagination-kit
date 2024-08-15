@@ -89,4 +89,5 @@ def test_default_limit_bounds_a_source_that_never_ends() -> None:
     with pytest.raises(PageLimitError) as error:
         list(iter_page_numbers(fetch))
     assert isinstance(error.value, PaginationError)
+    assert error.value.pages_fetched == error.value.max_pages == 1_000
     assert calls == 1_000
