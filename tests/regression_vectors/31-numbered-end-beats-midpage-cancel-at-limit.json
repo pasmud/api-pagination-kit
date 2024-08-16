@@ -1,0 +1,12 @@
+{
+  "title": "The final numbered page drains despite cancellation at the limit",
+  "mode": "numbered",
+  "options": {"start_page": 2, "end_page": 3, "max_pages": 2},
+  "cancel_after_items": 2,
+  "pages": [
+    {"token": 2, "items": ["head"]},
+    {"token": 3, "items": ["trigger", "tail"]},
+    {"token": 4, "items": []}
+  ],
+  "expected": {"fetches": [2, 3], "items": ["head", "trigger", "tail"]}
+}
