@@ -1,0 +1,11 @@
+{
+  "title": "Mid-page numbered cancellation preserves the remaining items",
+  "mode": "numbered",
+  "cancel_after_items": 2,
+  "pages": [
+    {"token": 1, "items": ["intro"]},
+    {"token": 2, "items": ["trigger", "still here", "also here"]},
+    {"token": 3, "items": ["blocked"]}
+  ],
+  "expected": {"fetches": [1, 2], "items": ["intro", "trigger", "still here", "also here"], "error": "cancelled"}
+}
