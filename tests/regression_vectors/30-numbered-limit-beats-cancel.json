@@ -1,0 +1,12 @@
+{
+  "title": "A spent numbered budget wins over pending cancellation",
+  "mode": "numbered",
+  "options": {"end_page": 3, "max_pages": 2},
+  "cancel_at": 2,
+  "pages": [
+    {"token": 1, "items": ["first", "second"]},
+    {"token": 2, "items": ["third"]},
+    {"token": 3, "items": ["unreached"]}
+  ],
+  "expected": {"fetches": [1, 2], "items": ["first", "second", "third"], "error": "limit"}
+}
