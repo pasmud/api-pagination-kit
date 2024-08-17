@@ -1,0 +1,11 @@
+{
+  "title": "A saved cursor starts at the requested suffix, not the head",
+  "mode": "cursor",
+  "options": {"start_cursor": "resume"},
+  "pages": [
+    {"token": null, "items": ["skipped"], "next": "resume"},
+    {"token": "resume", "items": ["suffix one"], "next": "tail"},
+    {"token": "tail", "items": ["suffix two", "suffix three"], "next": null}
+  ],
+  "expected": {"fetches": ["resume", "tail"], "items": ["suffix one", "suffix two", "suffix three"]}
+}
