@@ -1,0 +1,9 @@
+{
+  "title": "An empty terminal response does not fetch a stocked blank token",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": [], "next": null},
+    {"token": "", "items": ["unreached"], "next": null}
+  ],
+  "expected": {"fetches": [null], "items": []}
+}
