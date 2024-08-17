@@ -1,0 +1,11 @@
+{
+  "title": "Two interior cursor gaps preserve items from both sides",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["left", "edge"], "next": "gap-a"},
+    {"token": "gap-a", "items": [], "next": "gap-b"},
+    {"token": "gap-b", "items": [], "next": "right"},
+    {"token": "right", "items": ["right"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap-a", "gap-b", "right"], "items": ["left", "edge", "right"]}
+}
