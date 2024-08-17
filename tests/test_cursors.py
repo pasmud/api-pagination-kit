@@ -1,6 +1,11 @@
 import pytest
 
-from api_pagination_kit import CursorCycleError, PaginationError, iter_cursors
+from api_pagination_kit import (
+    CursorCycleError,
+    PageLimitError,
+    PaginationError,
+    iter_cursors,
+)
 
 
 def test_empty_page_continues_and_empty_string_is_a_cursor() -> None:
@@ -15,7 +20,7 @@ def test_empty_page_continues_and_empty_string_is_a_cursor() -> None:
         calls.append(cursor)
         return pages[cursor]
 
-    items = iter_cursors(fetch)
+    items = iter_cursors(fetch, max_pages=3)
     assert calls == []
     assert next(items) == "first"
     assert calls == [None]
@@ -61,7 +66,7 @@ def test_empty_self_loop_is_detected_during_one_pull() -> None:
         return [], ""
 
     with pytest.raises(CursorCycleError):
-        next(iter_cursors(fetch, start_cursor=""))
+        next(iter_cursors(fetch, start_cursor="", max_pages=1))
     assert calls == [""]
 
 
@@ -74,6 +79,19 @@ def test_start_cursor_rejects_non_strings_without_fetching() -> None:
 
 
 def test_invalid_continuation_is_rejected_before_page_items() -> None:
-    items = iter_cursors(lambda _: (["unreachable"], 0))  # type: ignore[arg-type, return-value]
+    bad_response = (["unreachable"], 0)
+    items = iter_cursors(lambda _: bad_response)  # type: ignore[arg-type, return-value]
     with pytest.raises(TypeError, match="next_cursor"):
         next(items)
+
+
+def test_unique_empty_pages_exhaust_budget_during_one_pull() -> None:
+    calls: list[str | None] = []
+
+    def fetch(cursor: str | None) -> tuple[list[str], str]:
+        calls.append(cursor)
+        return [], f"synthetic-{len(calls)}"
+
+    with pytest.raises(PageLimitError):
+        next(iter_cursors(fetch, max_pages=2))
+    assert calls == [None, "synthetic-1"]

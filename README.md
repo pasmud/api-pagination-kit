@@ -12,4 +12,9 @@ a fetch function returning `(items, next_cursor)`. A `None` response cursor
 ends iteration after that page; empty pages with a continuation still advance.
 A cursor is never requested twice: a cycle raises `CursorCycleError`.
 
+Both iterators accept a positive `max_pages` (default `1000`). Each fetch
+counts, including an empty page. If a further fetch would exceed the limit,
+iteration raises `PageLimitError` instead. Both guards derive from
+`PaginationError`.
+
 Install from a local checkout with `python -m pip install .`.
