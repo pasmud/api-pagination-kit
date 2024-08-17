@@ -1,0 +1,10 @@
+{
+  "title": "Consecutive leading cursor gaps are crossed before the first item",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": [], "next": "lead"},
+    {"token": "lead", "items": [], "next": "data"},
+    {"token": "data", "items": ["head", "tail"], "next": null}
+  ],
+  "expected": {"fetches": [null, "lead", "data"], "items": ["head", "tail"]}
+}
