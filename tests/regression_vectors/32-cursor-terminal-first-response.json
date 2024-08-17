@@ -1,0 +1,6 @@
+{
+  "title": "A stocked first cursor response ends without restarting at null",
+  "mode": "cursor",
+  "pages": [{"token": null, "items": ["one", "two", "three"], "next": null}],
+  "expected": {"fetches": [null], "items": ["one", "two", "three"]}
+}
