@@ -1,0 +1,15 @@
+{
+  "title": "Separated cursor gaps do not reset order or remove duplicates",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["repeat"], "next": "gap-a"},
+    {"token": "gap-a", "items": [], "next": "center"},
+    {"token": "center", "items": ["repeat", "middle", "repeat"], "next": "gap-b"},
+    {"token": "gap-b", "items": [], "next": "tail"},
+    {"token": "tail", "items": ["done", "repeat"], "next": null}
+  ],
+  "expected": {
+    "fetches": [null, "gap-a", "center", "gap-b", "tail"],
+    "items": ["repeat", "repeat", "middle", "repeat", "done", "repeat"]
+  }
+}
