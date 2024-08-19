@@ -1,0 +1,11 @@
+{
+  "title": "Resuming at blank is distinct from null and from text zero",
+  "mode": "cursor",
+  "options": {"start_cursor": ""},
+  "pages": [
+    {"token": null, "items": ["skipped head"], "next": ""},
+    {"token": "", "items": [], "next": "0"},
+    {"token": "0", "items": [0, "", null, {"rank": 1}], "next": null}
+  ],
+  "expected": {"fetches": ["", "0"], "items": [0, "", null, {"rank": 1}]}
+}
