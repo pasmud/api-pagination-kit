@@ -1,0 +1,10 @@
+{
+  "title": "A blank continuation is fetched before a stocked cursor tail",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["head"], "next": ""},
+    {"token": "", "items": ["through blank"], "next": "tail"},
+    {"token": "tail", "items": ["last", "last again"], "next": null}
+  ],
+  "expected": {"fetches": [null, "", "tail"], "items": ["head", "through blank", "last", "last again"]}
+}
