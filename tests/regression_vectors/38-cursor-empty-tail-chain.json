@@ -1,0 +1,10 @@
+{
+  "title": "An empty cursor tail is traversed through its terminal response",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["only item"], "next": "tail-a"},
+    {"token": "tail-a", "items": [], "next": "tail-b"},
+    {"token": "tail-b", "items": [], "next": null}
+  ],
+  "expected": {"fetches": [null, "tail-a", "tail-b"], "items": ["only item"]}
+}
