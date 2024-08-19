@@ -1,0 +1,11 @@
+{
+  "title": "An all-empty cursor chain can finish exactly at its budget",
+  "mode": "cursor",
+  "options": {"max_pages": 3},
+  "pages": [
+    {"token": null, "items": [], "next": "gap"},
+    {"token": "gap", "items": [], "next": ""},
+    {"token": "", "items": [], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap", ""], "items": []}
+}
