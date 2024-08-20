@@ -1,0 +1,10 @@
+{
+  "title": "Canonically equivalent Unicode cursor spellings remain distinct",
+  "mode": "cursor",
+  "options": {"start_cursor": "caf\u00e9"},
+  "pages": [
+    {"token": "caf\u00e9", "items": ["composed"], "next": "cafe\u0301"},
+    {"token": "cafe\u0301", "items": ["decomposed"], "next": null}
+  ],
+  "expected": {"fetches": ["caf\u00e9", "cafe\u0301"], "items": ["composed", "decomposed"]}
+}
