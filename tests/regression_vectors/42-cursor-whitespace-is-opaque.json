@@ -1,0 +1,11 @@
+{
+  "title": "Cursor whitespace must not be stripped before fetching",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["head"], "next": " key "},
+    {"token": " key ", "items": [], "next": "key"},
+    {"token": "key", "items": ["unpadded"], "next": " "},
+    {"token": " ", "items": ["single space"], "next": null}
+  ],
+  "expected": {"fetches": [null, " key ", "key", " "], "items": ["head", "unpadded", "single space"]}
+}
