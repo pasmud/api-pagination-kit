@@ -1,0 +1,11 @@
+{
+  "title": "Cursor links beat table order and keep punctuation and case",
+  "mode": "cursor",
+  "pages": [
+    {"token": "A+/?=", "items": ["last"], "next": null},
+    {"token": null, "items": ["first"], "next": "z:9"},
+    {"token": "a+/?=", "items": ["third", "fourth"], "next": "A+/?="},
+    {"token": "z:9", "items": ["second"], "next": "a+/?="}
+  ],
+  "expected": {"fetches": [null, "z:9", "a+/?=", "A+/?="], "items": ["first", "second", "third", "fourth", "last"]}
+}
