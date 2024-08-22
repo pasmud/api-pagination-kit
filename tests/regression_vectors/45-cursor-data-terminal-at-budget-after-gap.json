@@ -1,0 +1,11 @@
+{
+  "title": "A cursor gap can spend budget before a stocked terminal response",
+  "mode": "cursor",
+  "options": {"max_pages": 3},
+  "pages": [
+    {"token": null, "items": ["head"], "next": "gap"},
+    {"token": "gap", "items": [], "next": "last"},
+    {"token": "last", "items": ["tail one", "tail two", "tail three"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap", "last"], "items": ["head", "tail one", "tail two", "tail three"]}
+}
