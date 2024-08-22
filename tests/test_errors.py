@@ -68,6 +68,16 @@ def test_item_source_errors_propagate_after_partial_page(mode: str) -> None:
     assert list(items) == []
 
 
+@pytest.mark.parametrize("mode", ["number", "cursor"])
+def test_fetch_stop_iteration_is_an_error(mode: str) -> None:
+    def fetch() -> Iterable[int]:
+        raise StopIteration("synthetic fetch failure")
+
+    with pytest.raises(RuntimeError) as error:
+        next(paginate(mode, fetch, max_pages=1))
+    assert isinstance(error.value.__cause__, StopIteration)
+
+
 def test_default_limit_bounds_a_source_that_never_ends() -> None:
     calls = 0
 
