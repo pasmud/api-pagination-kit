@@ -1,0 +1,11 @@
+{
+  "title": "An empty terminal response finishes before checking cancellation",
+  "mode": "cursor",
+  "options": {"max_pages": 4},
+  "cancel_at": 2,
+  "pages": [
+    {"token": null, "items": ["kept"], "next": "end"},
+    {"token": "end", "items": [], "next": null}
+  ],
+  "expected": {"fetches": [null, "end"], "items": ["kept"]}
+}
