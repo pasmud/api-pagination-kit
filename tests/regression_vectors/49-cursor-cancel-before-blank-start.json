@@ -1,0 +1,8 @@
+{
+  "title": "Pre-cancellation prevents fetching a resumed blank cursor",
+  "mode": "cursor",
+  "options": {"start_cursor": ""},
+  "cancel_at": 0,
+  "pages": [{"token": "", "items": ["never fetched"], "next": null}],
+  "expected": {"fetches": [], "items": [], "error": "cancelled"}
+}
