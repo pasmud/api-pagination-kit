@@ -105,6 +105,7 @@ def _numbered_responses(
     fetch_page: Callable[[int], Iterable[T]],
     *,
     start_page: int,
+    end_page: int | None,
     max_pages: int,
     should_cancel: Callable[[], bool] | None,
 ) -> Iterator[tuple[int, Iterable[T]]]:
@@ -112,6 +113,11 @@ def _numbered_responses(
         raise TypeError("start_page must be an integer")
     if start_page < 0:
         raise ValueError("start_page must be nonnegative")
+    if end_page is not None:
+        if isinstance(end_page, bool) or not isinstance(end_page, int):
+            raise TypeError("end_page must be an integer or None")
+        if end_page < start_page:
+            raise ValueError("end_page must be at least start_page")
     _validate_guards(max_pages, should_cancel)
 
     def responses() -> Iterator[tuple[int, Iterable[T]]]:
@@ -119,6 +125,8 @@ def _numbered_responses(
             _check_cancel(should_cancel, pages_fetched)
             page_number = start_page + pages_fetched
             yield page_number, fetch_page(page_number)
+            if page_number == end_page:
+                return
         raise _page_limit_error(max_pages)
 
     return responses()
@@ -128,20 +136,23 @@ def iter_page_numbers(
     fetch_page: Callable[[int], Iterable[T]],
     *,
     start_page: int = 1,
+    end_page: int | None = None,
     max_pages: int = _DEFAULT_MAX_PAGES,
     should_cancel: Callable[[], bool] | None = None,
 ) -> Iterator[T]:
-    """Yield items in order until the first empty page.
+    """Yield items in order until the first empty page or inclusive end page.
 
     ``fetch_page`` receives consecutive page numbers starting at ``start_page``.
-    Fetches are deferred until iteration. If all ``max_pages`` permitted
-    fetches produce items, a further pull raises ``PageLimitError`` rather
-    than fetching again. If ``should_cancel`` returns true before an allowed
-    fetch, ``PaginationCancelledError`` is raised instead of fetching.
+    Supply ``end_page`` when the last page is known to avoid an extra fetch.
+    Fetches are deferred until iteration. If another fetch would exceed
+    ``max_pages``, a further pull raises ``PageLimitError``. If ``should_cancel``
+    returns true before an allowed fetch, ``PaginationCancelledError`` is raised
+    instead of fetching.
     """
     responses = _numbered_responses(
         fetch_page,
         start_page=start_page,
+        end_page=end_page,
         max_pages=max_pages,
         should_cancel=should_cancel,
     )
@@ -162,13 +173,15 @@ def iter_numbered_pages(
     fetch_page: Callable[[int], Iterable[T]],
     *,
     start_page: int = 1,
+    end_page: int | None = None,
     max_pages: int = _DEFAULT_MAX_PAGES,
     should_cancel: Callable[[], bool] | None = None,
 ) -> Iterator[NumberedPage[T]]:
-    """Yield nonempty numbered batches, consuming one page per pull."""
+    """Batch pages from the same traversal as ``iter_page_numbers``."""
     responses = _numbered_responses(
         fetch_page,
         start_page=start_page,
+        end_page=end_page,
         max_pages=max_pages,
         should_cancel=should_cancel,
     )

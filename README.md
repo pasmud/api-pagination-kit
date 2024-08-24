@@ -34,12 +34,17 @@ of `T` for the page items, including a generator.
 
 | Function | Fetch callable | End condition |
 | --- | --- | --- |
-| `iter_page_numbers(fetch_page, *, start_page=1, max_pages=1000)` | `Callable[[int], Iterable[T]]` | Stops at the first empty page. A short nonempty page still advances. |
+| `iter_page_numbers(fetch_page, *, start_page=1, end_page=None, max_pages=1000)` | `Callable[[int], Iterable[T]]` | Stops at the first empty page or after consuming `end_page`, if given. |
 | `iter_cursors(fetch_page, *, start_cursor=None, max_pages=1000)` | `Callable[[str \| None], tuple[Iterable[T], str \| None]]` | Stops after yielding the items from a response whose next cursor is `None`. |
 
 - **Page numbers:** `start_page` is a nonnegative integer. Page numbers increase
-  by one; an API whose last page is nonempty needs a final empty response to
-  signal completion under this pattern.
+  by one, even after a short nonempty page. By default, an API whose last page
+  is nonempty needs a final empty response to signal completion. If you know
+  the last page, pass its number as `end_page` to avoid that extra fetch. The
+  bound is inclusive and must be at least `start_page`; the first empty response
+  still stops traversal early. For example, `iter_page_numbers(fetch_page,
+  start_page=0, end_page=2, max_pages=3)` can fetch pages 0 through 2 and
+  finish normally without requesting page 3.
 - **Cursors:** `start_cursor` is the first value passed to the callable (`None`
   for a fresh traversal by default). Each fetch returns `(items, next_cursor)`.
   Cursor strings are opaque, and `""` is a valid continuation. An empty page with
