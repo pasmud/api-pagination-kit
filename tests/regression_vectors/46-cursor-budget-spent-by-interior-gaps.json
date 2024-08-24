@@ -1,0 +1,12 @@
+{
+  "title": "Interior cursor gaps can spend the budget before the final data",
+  "mode": "cursor",
+  "options": {"max_pages": 3},
+  "pages": [
+    {"token": null, "items": ["head", "kept"], "next": "gap-a"},
+    {"token": "gap-a", "items": [], "next": "gap-b"},
+    {"token": "gap-b", "items": [], "next": "last"},
+    {"token": "last", "items": ["unfetched"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap-a", "gap-b"], "items": ["head", "kept"], "error": "limit"}
+}
