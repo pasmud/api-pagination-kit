@@ -1,0 +1,11 @@
+{
+  "title": "The last allowed cursor page drains before its continuation fails",
+  "mode": "cursor",
+  "options": {"start_cursor": "resume", "max_pages": 2},
+  "pages": [
+    {"token": "resume", "items": [], "next": "batch"},
+    {"token": "batch", "items": ["a", "b", "c"], "next": ""},
+    {"token": "", "items": [], "next": null}
+  ],
+  "expected": {"fetches": ["resume", "batch"], "items": ["a", "b", "c"], "error": "limit"}
+}
