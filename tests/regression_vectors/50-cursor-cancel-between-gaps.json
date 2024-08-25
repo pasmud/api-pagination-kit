@@ -1,0 +1,12 @@
+{
+  "title": "Cancellation is checked between empty cursor responses on one pull",
+  "mode": "cursor",
+  "cancel_at": 2,
+  "pages": [
+    {"token": null, "items": ["before gaps", "kept"], "next": "gap-a"},
+    {"token": "gap-a", "items": [], "next": "gap-b"},
+    {"token": "gap-b", "items": [], "next": "last"},
+    {"token": "last", "items": ["unfetched"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap-a"], "items": ["before gaps", "kept"], "error": "cancelled"}
+}
