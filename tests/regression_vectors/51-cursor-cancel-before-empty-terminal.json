@@ -1,0 +1,10 @@
+{
+  "title": "Pending cancellation blocks the request for an empty cursor tail",
+  "mode": "cursor",
+  "cancel_at": 1,
+  "pages": [
+    {"token": null, "items": ["one", "two", "three"], "next": "end"},
+    {"token": "end", "items": [], "next": null}
+  ],
+  "expected": {"fetches": [null], "items": ["one", "two", "three"], "error": "cancelled"}
+}
