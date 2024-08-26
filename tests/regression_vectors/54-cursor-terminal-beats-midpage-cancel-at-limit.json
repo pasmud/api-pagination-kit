@@ -1,0 +1,11 @@
+{
+  "title": "A stocked terminal cursor drains despite cancellation at the limit",
+  "mode": "cursor",
+  "options": {"max_pages": 2},
+  "cancel_after_items": 1,
+  "pages": [
+    {"token": null, "items": [], "next": "last"},
+    {"token": "last", "items": ["trigger", "last item"], "next": null}
+  ],
+  "expected": {"fetches": [null, "last"], "items": ["trigger", "last item"]}
+}
