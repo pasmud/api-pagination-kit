@@ -1,0 +1,12 @@
+{
+  "title": "A budget spent on an empty cursor page wins over cancellation",
+  "mode": "cursor",
+  "options": {"max_pages": 2},
+  "cancel_at": 2,
+  "pages": [
+    {"token": null, "items": ["kept"], "next": "gap"},
+    {"token": "gap", "items": [], "next": "last"},
+    {"token": "last", "items": ["blocked"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap"], "items": ["kept"], "error": "limit"}
+}
