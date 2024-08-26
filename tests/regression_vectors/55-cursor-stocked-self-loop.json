@@ -1,0 +1,7 @@
+{
+  "title": "A stocked cursor self-loop yields its items before reporting a cycle",
+  "mode": "cursor",
+  "options": {"start_cursor": "loop"},
+  "pages": [{"token": "loop", "items": ["one", "two"], "next": "loop"}],
+  "expected": {"fetches": ["loop"], "items": ["one", "two"], "error": "cycle", "first_seen_on_page": 1}
+}
