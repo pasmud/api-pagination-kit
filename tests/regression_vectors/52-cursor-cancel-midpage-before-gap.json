@@ -1,0 +1,11 @@
+{
+  "title": "Mid-page cursor cancellation drains data but blocks the next gap",
+  "mode": "cursor",
+  "cancel_after_items": 1,
+  "pages": [
+    {"token": null, "items": ["trigger", "still here", "also here"], "next": "gap"},
+    {"token": "gap", "items": [], "next": "last"},
+    {"token": "last", "items": ["unfetched"], "next": null}
+  ],
+  "expected": {"fetches": [null], "items": ["trigger", "still here", "also here"], "error": "cancelled"}
+}
