@@ -1,0 +1,15 @@
+{
+  "title": "A cursor cycle reports the original interior request position",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["one", "two"], "next": "second"},
+    {"token": "second", "items": ["three"], "next": "third"},
+    {"token": "third", "items": ["four", "five"], "next": "second"}
+  ],
+  "expected": {
+    "fetches": [null, "second", "third"],
+    "items": ["one", "two", "three", "four", "five"],
+    "error": "cycle",
+    "first_seen_on_page": 2
+  }
+}
