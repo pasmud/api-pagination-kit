@@ -1,0 +1,15 @@
+{
+  "title": "An empty response's cursor is remembered for later cycle detection",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": ["head"], "next": "gap"},
+    {"token": "gap", "items": [], "next": "tail"},
+    {"token": "tail", "items": ["tail", "kept"], "next": "gap"}
+  ],
+  "expected": {
+    "fetches": [null, "gap", "tail"],
+    "items": ["head", "tail", "kept"],
+    "error": "cycle",
+    "first_seen_on_page": 2
+  }
+}
