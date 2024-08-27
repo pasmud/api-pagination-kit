@@ -1,0 +1,15 @@
+{
+  "title": "An empty cursor response can close a cycle back to a data page",
+  "mode": "cursor",
+  "options": {"start_cursor": ""},
+  "pages": [
+    {"token": "", "items": ["before gap", "kept"], "next": "gap"},
+    {"token": "gap", "items": [], "next": ""}
+  ],
+  "expected": {
+    "fetches": ["", "gap"],
+    "items": ["before gap", "kept"],
+    "error": "cycle",
+    "first_seen_on_page": 1
+  }
+}
