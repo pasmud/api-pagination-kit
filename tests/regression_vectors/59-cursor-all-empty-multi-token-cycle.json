@@ -1,0 +1,10 @@
+{
+  "title": "An all-empty multi-token cycle fails on the first item pull",
+  "mode": "cursor",
+  "pages": [
+    {"token": null, "items": [], "next": "entry"},
+    {"token": "entry", "items": [], "next": "loop"},
+    {"token": "loop", "items": [], "next": "entry"}
+  ],
+  "expected": {"fetches": [null, "entry", "loop"], "items": [], "error": "cycle", "first_seen_on_page": 2}
+}
