@@ -1,0 +1,16 @@
+{
+  "title": "A pending cancellation cannot mask a cycle with budget to spare",
+  "mode": "cursor",
+  "options": {"start_cursor": "start", "max_pages": 5},
+  "cancel_at": 2,
+  "pages": [
+    {"token": "start", "items": ["first"], "next": "second"},
+    {"token": "second", "items": ["second", "third"], "next": "start"}
+  ],
+  "expected": {
+    "fetches": ["start", "second"],
+    "items": ["first", "second", "third"],
+    "error": "cycle",
+    "first_seen_on_page": 1
+  }
+}
