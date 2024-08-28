@@ -1,0 +1,12 @@
+{
+  "title": "A cycle through an empty page wins over budget and cancellation",
+  "mode": "cursor",
+  "options": {"max_pages": 3},
+  "cancel_at": 3,
+  "pages": [
+    {"token": null, "items": ["head"], "next": ""},
+    {"token": "", "items": [], "next": "tail"},
+    {"token": "tail", "items": ["tail"], "next": ""}
+  ],
+  "expected": {"fetches": [null, "", "tail"], "items": ["head", "tail"], "error": "cycle", "first_seen_on_page": 2}
+}
