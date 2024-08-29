@@ -72,6 +72,10 @@ Pages may contain any iterable of `T`, including a generator.
 ## Development
 
 ```sh
-python -m pip install '.[test]'
+python -m pip install '.[test]' ruff
+ruff check
+ruff format --check
 python -m pytest
 ```
+
+CI checks the installed package on Python 3.11 and 3.14.
