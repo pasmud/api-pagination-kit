@@ -1,0 +1,12 @@
+{
+  "title": "One item pull crosses leading cursor gaps without draining data",
+  "mode": "cursor",
+  "take": 1,
+  "pages": [
+    {"token": null, "items": [], "next": "gap"},
+    {"token": "gap", "items": [], "next": "data"},
+    {"token": "data", "items": ["first", "unread"], "next": "tail"},
+    {"token": "tail", "items": ["unfetched"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap", "data"], "items": ["first"]}
+}
