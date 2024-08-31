@@ -1,0 +1,11 @@
+{
+  "title": "Stopping at a numbered page seam leaves the empty probe unfetched",
+  "mode": "numbered",
+  "take": 3,
+  "pages": [
+    {"token": 1, "items": ["single"]},
+    {"token": 2, "items": ["left", "right"]},
+    {"token": 3, "items": []}
+  ],
+  "expected": {"fetches": [1, 2], "items": ["single", "left", "right"]}
+}
