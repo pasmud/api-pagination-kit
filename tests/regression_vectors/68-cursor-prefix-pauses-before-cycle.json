@@ -1,0 +1,11 @@
+{
+  "title": "Taking the cycle-closing page's items does not yet raise the cycle",
+  "mode": "cursor",
+  "options": {"start_cursor": "root"},
+  "take": 3,
+  "pages": [
+    {"token": "root", "items": ["one"], "next": "loop"},
+    {"token": "loop", "items": ["two", "three"], "next": "root"}
+  ],
+  "expected": {"fetches": ["root", "loop"], "items": ["one", "two", "three"]}
+}
