@@ -1,0 +1,9 @@
+{
+  "title": "Zero item pulls perform neither numbered fetch nor cancellation check",
+  "mode": "numbered",
+  "options": {"start_page": 0},
+  "cancel_at": 0,
+  "take": 0,
+  "pages": [{"token": 0, "items": ["unread"]}],
+  "expected": {"fetches": [], "items": []}
+}
