@@ -1,0 +1,12 @@
+{
+  "title": "Taking all items at the numbered budget needs no failing extra pull",
+  "mode": "numbered",
+  "options": {"start_page": 20, "max_pages": 2},
+  "take": 4,
+  "pages": [
+    {"token": 20, "items": ["one", "two", "three"]},
+    {"token": 21, "items": ["four"]},
+    {"token": 22, "items": ["unfetched"]}
+  ],
+  "expected": {"fetches": [20, 21], "items": ["one", "two", "three", "four"]}
+}
