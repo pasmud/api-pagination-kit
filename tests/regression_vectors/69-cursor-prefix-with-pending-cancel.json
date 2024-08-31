@@ -1,0 +1,13 @@
+{
+  "title": "Stopping on the blank-cursor page leaves cancellation unchecked",
+  "mode": "cursor",
+  "cancel_after_items": 2,
+  "take": 2,
+  "pages": [
+    {"token": null, "items": ["head"], "next": "gap"},
+    {"token": "gap", "items": [], "next": ""},
+    {"token": "", "items": ["trigger", "unread"], "next": "tail"},
+    {"token": "tail", "items": ["unfetched"], "next": null}
+  ],
+  "expected": {"fetches": [null, "gap", ""], "items": ["head", "trigger"]}
+}
