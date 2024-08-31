@@ -1,0 +1,10 @@
+{
+  "title": "A numbered prefix reads only the requested items within a page",
+  "mode": "numbered",
+  "take": 2,
+  "pages": [
+    {"token": 1, "items": ["one", "two", "unread", "also unread"]},
+    {"token": 2, "items": ["unfetched"]}
+  ],
+  "expected": {"fetches": [1], "items": ["one", "two"]}
+}
