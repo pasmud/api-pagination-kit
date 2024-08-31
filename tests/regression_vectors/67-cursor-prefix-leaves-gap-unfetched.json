@@ -1,0 +1,11 @@
+{
+  "title": "A pull at a cursor seam does not look through the following gap",
+  "mode": "cursor",
+  "take": 2,
+  "pages": [
+    {"token": null, "items": ["head", "edge"], "next": "gap"},
+    {"token": "gap", "items": [], "next": "tail"},
+    {"token": "tail", "items": ["unfetched"], "next": null}
+  ],
+  "expected": {"fetches": [null], "items": ["head", "edge"]}
+}
